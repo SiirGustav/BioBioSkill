@@ -9,28 +9,30 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write
+
     steps:
-    - name: Download repository
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Setting Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 20
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-    - name: Dependency install
-      run: npm install
+      - name: Install dependencies
+        run: npm ci || npm install
 
-    - name: Installing Playwright browser
-      run: npx playwright install chromium
+      - name: Install Playwright Browsers and OS Dependencies
+        run: npx playwright install --with-deps chromium
 
-    - name: Executing scraper
-      run: node scraper.js
+      - name: Run Scraper
+        run: node scraper.js
 
-    - name: Uploading news to Github Pages
-      run: |
-        git config --global user.name "Alexa Scraper Bot"
-        git config --global user.email "actions@github.com"
-        git add feed.json
-        git diff-index --quiet HEAD || git commit -m "System: News daily update"
-        git push origin main
+      - name: Uploading news to Github Pages
+        run: |
+          git config --global user.name "Alexa Scraper Bot"
+          git config --global user.email "actions@github.com"
+          git add feed.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "System: News daily update" && git push)

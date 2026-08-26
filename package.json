@@ -1,7 +1,7 @@
 {
 	"name": "powerpudu-biobio-scraper",
 	"author": "PowerPudu",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "Radio Bio-Bio scraper, to generate feed for Alexa Flash Briefing",
 	"main": "scraper.js",
 	"dependencies": {
